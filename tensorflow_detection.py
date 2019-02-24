@@ -102,9 +102,11 @@ def main():
                     (box[1],box[2]), (box[1],box[0])]
             draw.line(points, fill='red', width=2)
     
+    f = TemporaryFile('w+b')
     img = img.resize((w//2, h//2))
-    img.save("current.png")
-    storage.child("/current.png").put("current.png")
+    img.save(f, 'PNG')
+    f.seek(0)
+    storage.child("/current.png").put(f)
 
     requests.post('http://{}/{}/{}'.format(firebase_app_ip,
            quote(location_type), quote(location_name)), 
